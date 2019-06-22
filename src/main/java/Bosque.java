@@ -10,4 +10,6 @@ public class Bosque {
     private List<Cachorro> cachorros;
     private Cachorro cachorroSalvaVidas;
 
+    public static void main(String args[]) {
+    }
 }

@@ -13,8 +13,8 @@ public class Cacador extends Thread {
     public Cacador(String cor) {
         this.totalMoedas = 0;
         this.cor = cor;
-        this.cachorro1 = new Cachorro(this.cor);
-        this.cachorro2 = new Cachorro(this.cor);
+        this.cachorro1 = new Cachorro(this.cor, 1);
+        this.cachorro2 = new Cachorro(this.cor, 2);
     }
 
     @Override

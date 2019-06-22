@@ -14,12 +14,14 @@ public class Cachorro extends Thread {
     também irá verificar se há cachorros dormindo, se houver deve acorda-los para que tentem pegar a unica moeda recem colocada, os que não conseguirem devem voltar a dormir por mais 3 unidades de tempo*/
 
     private Thread t;
+    private int numero;
     private int qtdMoedas;
     private String cor;
 
-    public Cachorro(String cor) {
+    public Cachorro(String cor, int numero) {
         this.cor = cor;
         this.qtdMoedas = 0;
+        this.numero = numero;
     }
 
     @Override
@@ -45,4 +47,6 @@ public class Cachorro extends Thread {
     public String getCor() {
         return cor;
     }
+
+
 }
