@@ -1,56 +1,37 @@
 package main.java;
 
-public class Cacador extends Thread {
-    /*Tem 2 cachorros*/
-    /*Vence quando tiver 50 moedas antes dos oponentes*/
+import static java.lang.System.exit;
 
-    private Thread t;
+public class Cacador {
+
     private int totalMoedas;
-    private String cor;
-    private Cachorro cachorro1;
-    private Cachorro cachorro2;
+    private String nome;
+    private boolean ganhador;
 
-    public Cacador(String cor) {
+    public Cacador(String nome) {
         this.totalMoedas = 0;
-        this.cor = cor;
-        this.cachorro1 = new Cachorro(this.cor, 1);
-        this.cachorro2 = new Cachorro(this.cor, 2);
+        this.nome = nome;
+        this.ganhador = false;
     }
-
-    @Override
-    public void run() {
-    }
-
-    @Override
-    public void start() {
-        if (t == null) {
-            t = new Thread(this, cor);
-            t.start();
-        }
-    }
-
 
     public int getTotalMoedas() {
         return totalMoedas;
     }
 
-    public void setTotalMoedas(int totalMoedas) {
-        this.totalMoedas = totalMoedas;
+    public boolean isGanhador() {
+        return ganhador;
     }
 
-    public String getCor() {
-        return cor;
-    }
+    public void setTotalMoedas(int moedas) {
+        this.totalMoedas += moedas;
 
-    public void setCor(String cor) {
-        this.cor = cor;
-    }
+        if (this.totalMoedas >= 50) {
+            this.ganhador = true;
+            Cachorro.running = false;
+            System.out.println("Ganhador é " + this.nome);
+            exit(0);
+        }
 
-    public Cachorro getCachorro1() {
-        return cachorro1;
-    }
-
-    public Cachorro getCachorro2() {
-        return cachorro2;
+        System.out.println("Caçador " + this.nome + " está com " + this.totalMoedas);
     }
 }

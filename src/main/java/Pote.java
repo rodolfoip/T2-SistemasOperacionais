@@ -1,38 +1,45 @@
 package main.java;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Random;
 
 public class Pote {
-    /*Pode ser acessado por apenas UM cachorro*/
-    //ATRIBUTOS
-    /*Quantidade de moedas*/
-    /*Cachorro que estão dormindo*/
 
     private int id;
     private int moedas;
-    private List<Cachorro> cachorrosDormindo;
+    private int[] caminhos;
 
-    public Pote(int id) {
+    public Pote(int id, int[] array) {
         this.id = id;
         this.moedas = 4;
-        this.cachorrosDormindo = new ArrayList<>();
+        this.caminhos = array;
     }
 
-    public int pegaMoeda(Cachorro cachorro) {
-        if (moedas >= 3) {
-            moedas = (moedas - 3);
-            return 3;
-        } else if (moedas == 2) {
-            moedas = (moedas - 2);
-            return 2;
-        } else if (moedas == 1) {
-            moedas = (moedas - 1);
-            return 1;
-        }
+    public int getId() {
+        return id;
+    }
 
-        cachorrosDormindo.add(cachorro);
+    public void adicionaMoedas() {
+        this.moedas++;
+    }
 
-        return 0;
+    public void removeMoedas() {
+        this.moedas--;
+    }
+
+    public boolean estaVazio() {
+        return moedas == 0;
+    }
+
+    public int encontraCaminho() {
+        Random rand = new Random();
+        return caminhos[rand.nextInt(caminhos.length)];
+    }
+
+    @Override
+    public String toString() {
+        return "Pote{" +
+                "id=" + id +
+                ", moedas=" + moedas +
+                '}';
     }
 }
