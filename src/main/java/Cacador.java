@@ -28,10 +28,10 @@ public class Cacador {
         if (this.totalMoedas >= 50) {
             this.ganhador = true;
             Cachorro.running = false;
-            System.out.println("Ganhador é " + this.nome);
+            System.out.println("Ganhador é o" + this.nome);
             exit(0);
         }
 
-        System.out.println("Caçador " + this.nome + " está com " + this.totalMoedas);
+        System.out.println("Caçador " + this.nome + " está com " + this.totalMoedas + " moedas");
     }
 }

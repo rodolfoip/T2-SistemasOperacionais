@@ -12,14 +12,14 @@ public class Arena {
     public static void main(String args[]) {
         Bosque bosque = new Bosque();
 
-        Cacador amarelo = new Cacador("Amarelo");
-        Cacador verde = new Cacador("Verde");
-        Cacador azul = new Cacador("Azul");
+        Cacador amarelo = new Cacador("Caçador Amarelo");
+        Cacador verde = new Cacador("Caçador Verde");
+        Cacador azul = new Cacador("Caçador Azul");
 
         ExecutorService executor = Executors.newFixedThreadPool(3);
 
         salvaVidas = Executors.newSingleThreadScheduledExecutor();
-        salvaVidas.scheduleAtFixedRate(new CachorroSalvaVida(bosque), 0, 4, TimeUnit.SECONDS);
+        salvaVidas.scheduleAtFixedRate(new CachorroSalvaVida(bosque), 0, 200, TimeUnit.MILLISECONDS);
 
         Cachorro amarelo1 = new Cachorro("Cachorro Amarelo 1", amarelo, bosque, bosque.getPote(1));
         Cachorro amarelo2 = new Cachorro("Cachorro Amarelo 2", amarelo, bosque, bosque.getPote(1));
@@ -37,6 +37,10 @@ public class Arena {
         executor.submit(amarelo2);
         executor.submit(verde2);
         executor.submit(azul2);
+
+        executor.submit(amarelo1);
+        executor.submit(verde1);
+        executor.submit(azul1);
 
         salvaVidas.shutdown();
     }

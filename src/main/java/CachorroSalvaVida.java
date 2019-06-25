@@ -13,8 +13,14 @@ public class CachorroSalvaVida extends Thread {
     public void run() {
         while (Cachorro.running) {
             for (int i = 1; i <= 20; i++) {
-                this.pote = bosque.getPote(i);
 
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    System.out.println("Erro:" + e);
+                }
+
+                this.pote = bosque.getPote(i);
                 if (this.pote.estaVazio()) {
                     this.colocaMoeda();
                 }
@@ -26,7 +32,7 @@ public class CachorroSalvaVida extends Thread {
 
     public synchronized void colocaMoeda() {
         this.pote.adicionaMoedas();
-        System.out.println("Cachorro salva vidas adicionou 1 moeda no pote " + this.pote.getId());
+        System.out.println("** Cachorro salva vidas adicionou 1 moeda no pote " + this.pote.getId());
         notifyAll();
     }
 }

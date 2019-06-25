@@ -18,31 +18,29 @@ public class Cachorro extends Thread {
 
     @Override
     public void run() {
-        while (true) {
-            while (this.qtdMoedas < 20 && this.cacador.getTotalMoedas() + this.qtdMoedas < 50 && running) {
-                try {
-                    int coletadas = this.pegaMoeda(this.qtdMoedas);
-                    this.qtdMoedas += coletadas;
+        while (this.qtdMoedas < 20 && this.cacador.getTotalMoedas() + this.qtdMoedas < 50 && running) {
+            try {
+                int coletadas = this.pegaMoeda(this.qtdMoedas);
+                this.qtdMoedas += coletadas;
 
-                    System.out.println(getName() + " está com " + this.qtdMoedas + " moedas");
+                System.out.println(getName() + " está com " + this.qtdMoedas + " moedas");
 
-                    int caminho = this.pote.encontraCaminho();
-                    this.pote = this.bosque.getPote(caminho);
+                int caminho = this.pote.encontraCaminho();
+                this.pote = this.bosque.getPote(caminho);
 
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    System.out.println("Erro: " + e);
-                }
+                sleep(100);
+            } catch (InterruptedException e) {
+                System.out.println("Erro: " + e);
             }
-
-            if (!this.cacador.isGanhador()) {
-                System.out.println(getName() + " já conseguiu as " + this.qtdMoedas + " esta indo levar ao seu dono");
-                cacador.setTotalMoedas(this.qtdMoedas);
-                this.qtdMoedas = 0;
-            }
-
-            System.out.println(getName() + " acabou");
         }
+
+        if (!this.cacador.isGanhador()) {
+            System.out.println(getName() + " já conseguiu as " + this.qtdMoedas + " esta indo levar ao seu dono");
+            cacador.setTotalMoedas(this.qtdMoedas);
+            this.qtdMoedas = 0;
+        }
+
+        System.out.println(getName() + " acabou");
     }
 
     public synchronized int pegaMoeda(int moedas) throws InterruptedException {
@@ -50,12 +48,8 @@ public class Cachorro extends Thread {
         int moedasAtual = moedas;
 
         while (this.pote.estaVazio()) {
-            try {
-                System.out.println(getName() + " achou o pote " + this.pote.getId() + " vaziu e dormiu");
-                Thread.sleep(6000);
-            } catch (InterruptedException e) {
-                System.out.println("Erro doido " + e);
-            }
+            System.out.println(getName() + " achou o pote " + this.pote.getId() + " vazio e DORMIU");
+            sleep(6000);
         }
 
         while (coletadas < 3 && moedasAtual < 20 && !this.pote.estaVazio()) {
@@ -63,6 +57,7 @@ public class Cachorro extends Thread {
             this.pote.removeMoedas();
             coletadas++;
             moedasAtual++;
+            sleep(100);
         }
 
         return coletadas;
