@@ -1,48 +1,65 @@
 package main.java;
 
 public class Cachorro extends Thread {
-    /*Quando encontra um pote consegue levar até TRÊS moedas,
-    após isso, ele vai procurar no proximo pode escolhido aleatoriamente, dentre as opções disponiveis podendo inclusive voltar para o anterior*/
-    /*Se encontrar um pote vazio, deve dormir por 60 unidades de tempo ou até que o Cachorro salva-vida coloque UMA moeda no pote*/
-    /*Cachorro salva-vida visita todos os podes de acordo com a ordem numérica para determinar os que estão vazios, nos vazios ele coloca UMA moeda*/
-    /*Quando tiver 20 moedas deve voltar imediatamente para o cacador, deixar as moedas e voltar para a fila de entrada do bosque*/
-    /*Quando o total de moedas do cacador + o número de moedas com o cachorro totalizarem 50, o cachorro pode voltar para o caçador*/
-    /*Demora UMA unidade de tempo para sair de um pote para outro*/
-    /*Demora UMA unidade de tempo para pegar as moedas de um pote, caso haja*/
-    /*Pode acessar um pote com cachorros que estejam dormindo nesse pote*/
-    /*Cachorro salva-vida passa a cada 2 unidades de tempo verificando quais potes estão vazios e colocar uma moeda,
-    também irá verificar se há cachorros dormindo, se houver deve acorda-los para que tentem pegar a unica moeda recem colocada, os que não conseguirem devem voltar a dormir por mais 3 unidades de tempo*/
 
-    private Thread t;
     private int qtdMoedas;
-    private String cor;
+    private Pote pote;
+    private Bosque bosque;
+    private Cacador cacador;
+    public static boolean running = true;
 
-    public Cachorro(String cor) {
-        this.cor = cor;
+    public Cachorro(String nome, Cacador cacador, Bosque bosque, Pote pote) {
+        this.setName(nome);
         this.qtdMoedas = 0;
+        this.pote = pote;
+        this.cacador = cacador;
+        this.bosque = bosque;
     }
 
     @Override
     public void run() {
-    }
+        while (this.qtdMoedas < 20 && this.cacador.getTotalMoedas() + this.qtdMoedas < 50 && running) {
+            try {
+                int coletadas = this.pegaMoeda(this.qtdMoedas);
+                this.qtdMoedas += coletadas;
 
-    @Override
-    public void start() {
-        if (t == null) {
-            t = new Thread(this, cor);
-            t.start();
+                System.out.println(getName() + " está com " + this.qtdMoedas + " moedas");
+
+                int caminho = this.pote.encontraCaminho();
+                this.pote = this.bosque.getPote(caminho);
+
+                sleep(100);
+            } catch (InterruptedException e) {
+                System.out.println("Erro: " + e);
+            }
         }
+
+        if (!this.cacador.isGanhador()) {
+            System.out.println(getName() + " já conseguiu as " + this.qtdMoedas + " esta indo levar ao seu dono");
+            cacador.setTotalMoedas(this.qtdMoedas);
+            this.qtdMoedas = 0;
+        }
+
+        System.out.println(getName() + " acabou");
     }
 
-    public int getQtdMoedas() {
-        return qtdMoedas;
-    }
+    public synchronized int pegaMoeda(int moedas) throws InterruptedException {
+        int coletadas = 0;
+        int moedasAtual = moedas;
 
-    public void setQtdMoedas(int qtdMoedas) {
-        this.qtdMoedas = qtdMoedas;
-    }
+        while (this.pote.estaVazio()) {
+            System.out.println(getName() + " achou o pote " + this.pote.getId() + " vazio e DORMIU");
+            sleep(6000);
+        }
 
-    public String getCor() {
-        return cor;
+        while (coletadas < 3 && moedasAtual < 20 && !this.pote.estaVazio()) {
+            System.out.println(getName() + " está pegando moedas no pote: " + this.pote.toString());
+            this.pote.removeMoedas();
+            coletadas++;
+            moedasAtual++;
+            sleep(100);
+        }
+
+        return coletadas;
     }
 }
